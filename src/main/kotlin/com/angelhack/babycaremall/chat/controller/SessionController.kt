@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.CrossOrigin
 
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -30,4 +31,12 @@ class SessionController(
         // skip validation for sessionid owned by user
         return sessionService.messages(sessionId, lastMessageId)
     }
+
+    @PostMapping()
+    fun createSession(
+    ): Session {
+        // skip validation for sessionid owned by user
+        return sessionService.saveSession(userId)
+    }
+
 }
