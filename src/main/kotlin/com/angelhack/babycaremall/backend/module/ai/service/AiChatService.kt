@@ -1,6 +1,8 @@
 package com.angelhack.babycaremall.backend.module.ai.service
 
 import com.angelhack.babycaremall.backend.module.ai.dto.ChatContext
+import com.angelhack.babycaremall.backend.module.ai.dto.ChatResponse
+import com.angelhack.babycaremall.const.MessageRole
 import org.springframework.ai.chat.client.ChatClient
 import org.springframework.ai.chat.memory.InMemoryChatMemory
 import org.springframework.ai.chat.messages.AssistantMessage
@@ -22,10 +24,8 @@ class AiChatService(
         userMessage: String,
         context: String? = null,
         sessionId: String? = null,
-    ): ChatContext {
+    ): ChatResponse {
         val sid: String = sessionId ?: UUID.randomUUID().toString()
-
-
         val memoryMessage = chatMemory.get(sessionId, 5)
 
         val fullPrompt = promptRagService.getPrompt(memoryMessage, userMessage, context, sid)
@@ -37,10 +37,10 @@ class AiChatService(
         chatMemory.add(sid, UserMessage(userMessage))
         chatMemory.add(sid, AssistantMessage(answer))
 
-        return ChatContext(answer, sid)
+        return ChatResponse(TODO(), MessageRole.USER, answer, context, System.currentTimeMillis(), sid)
     }
 
-    fun generateProductRecommendation(category: String, budget: String?, ageGroup: String?): ChatContext {
+    fun generateProductRecommendation(category: String, budget: String?, ageGroup: String?): ChatResponse {
         val prompt = buildString {
             append("다음 조건에 맞는 아기용품을 추천해주세요:\n")
             append("카테고리: $category\n")

@@ -4,6 +4,7 @@ import com.angelhack.babycaremall.backend.module.ai.dto.ChatRequest
 import com.angelhack.babycaremall.backend.module.ai.dto.ChatResponse
 import com.angelhack.babycaremall.backend.module.ai.dto.ProductRecommendationRequest
 import com.angelhack.babycaremall.backend.module.ai.service.AiChatService
+import com.angelhack.babycaremall.const.MessageRole
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -11,25 +12,32 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/ai")
 @CrossOrigin(origins = ["http://localhost:3000"])
 class AiChatController(
-    private val aiChatService: AiChatService
+    private val aiChatService: AiChatService,
 ) {
-    
+
     @PostMapping("/chat")
     fun chat(@RequestBody request: ChatRequest): ResponseEntity<ChatResponse> {
         return try {
-
-            val response = aiChatService.generateResponse(request.message, request.context, request.sessionId)
+            val response = aiChatService.generateResponse(request.content, request.context, request.sessionId)
             ResponseEntity.ok(
                 ChatResponse(
-                    response = response.text,
-                    sessionId = response.sessionId
+                    content = response.content,
+                    sessionId = response.sessionId,
+                    created = System.currentTimeMillis(),
+                    id = response.id,
+                    role = response.role,
+                    context = response.context
                 )
             )
         } catch (e: Exception) {
             ResponseEntity.internalServerError().body(
                 ChatResponse(
-                    response = "죄송합니다. 오류가 발생했습니다: ${e.message}",
-                    sessionId = request.sessionId
+                    content = "죄송합니다. 오류가 발생했습니다: ${e.message}",
+                    sessionId = request.sessionId,
+                    id = 0,
+                    role = MessageRole.USER,
+                    context = request.context,
+                    created = System.currentTimeMillis()
                 )
             )
         }
@@ -44,14 +52,21 @@ class AiChatController(
                 budget = request.budget,
                 ageGroup = request.ageGroup
             )
-            ResponseEntity.ok(ChatResponse(response = response.text, sessionId = response.sessionId))
+            ResponseEntity.ok(response)
         } catch (e: Exception) {
             ResponseEntity.internalServerError().body(
-                ChatResponse(response = "제품 추천 중 오류가 발생했습니다: ${e.message}")
+                ChatResponse(
+                    content = "제품 추천 중 오류가 발생했습니다: ${e.message}",
+                    sessionId = request.sessionId,
+                    id = 0,
+                    role = MessageRole.USER,
+                    context = "",
+                    created = System.currentTimeMillis()
+                )
             )
         }
     }
-    
+
     @GetMapping("/health")
     fun healthCheck(): ResponseEntity<Map<String, String>> {
         return ResponseEntity.ok(mapOf("status" to "AI service is running"))

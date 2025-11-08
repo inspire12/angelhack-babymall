@@ -1,6 +1,7 @@
 package com.angelhack.babycaremall.backend.module.ai.dto
 
 data class ChatContext (
-    val text: String,
+    val content: String,
+
     val sessionId: String
 )
