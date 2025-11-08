@@ -14,7 +14,7 @@ class BabyDiaryService(
         return babyDiaryRepository.findAll()
     }
     
-    fun getDiaryById(id: Long): Optional<BabyDiary> {
+    fun getDiaryById(id: String): Optional<BabyDiary> {
         return babyDiaryRepository.findById(id)
     }
     
@@ -22,7 +22,7 @@ class BabyDiaryService(
         return babyDiaryRepository.save(diary)
     }
     
-    fun updateDiary(id: Long, updatedDiary: BabyDiary): Optional<BabyDiary> {
+    fun updateDiary(id: String, updatedDiary: BabyDiary): Optional<BabyDiary> {
         return if (babyDiaryRepository.existsById(id)) {
             Optional.of(babyDiaryRepository.save(updatedDiary.copy(id = id)))
         } else {
@@ -30,7 +30,7 @@ class BabyDiaryService(
         }
     }
     
-    fun deleteDiary(id: Long): Boolean {
+    fun deleteDiary(id: String): Boolean {
         return if (babyDiaryRepository.existsById(id)) {
             babyDiaryRepository.deleteById(id)
             true

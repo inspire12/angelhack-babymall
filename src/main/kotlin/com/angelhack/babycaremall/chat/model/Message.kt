@@ -10,7 +10,7 @@ import java.util.UUID
 @Document(collection ="messages")
 data class Message(
     @Id
-    var id: ObjectId? = null,
+    var id: String? = null,
     var sessionId: String,
     var messageId: Long,
     var content: String,

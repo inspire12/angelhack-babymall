@@ -18,7 +18,7 @@ class BabyController(
     }
 
     @GetMapping("/{id}")
-    fun getDiaryById(@PathVariable id: Long): ResponseEntity<BabyDiary> {
+    fun getDiaryById(@PathVariable id: String): ResponseEntity<BabyDiary> {
         return babyDiaryService.getDiaryById(id)
             .map { ResponseEntity.ok(it) }
             .orElse(ResponseEntity.notFound().build())
@@ -31,14 +31,14 @@ class BabyController(
     }
 
     @PutMapping("/{id}")
-    fun updateDiary(@PathVariable id: Long, @RequestBody diary: BabyDiary): ResponseEntity<BabyDiary> {
+    fun updateDiary(@PathVariable id: String, @RequestBody diary: BabyDiary): ResponseEntity<BabyDiary> {
         return babyDiaryService.updateDiary(id, diary)
             .map { ResponseEntity.ok(it) }
             .orElse(ResponseEntity.notFound().build())
     }
 
     @DeleteMapping("/{id}")
-    fun deleteDiary(@PathVariable id: Long): ResponseEntity<Void> {
+    fun deleteDiary(@PathVariable id: String): ResponseEntity<Void> {
         return if (babyDiaryService.deleteDiary(id)) {
             ResponseEntity.noContent().build()
         } else {

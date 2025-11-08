@@ -57,9 +57,9 @@ class AiChatService(
         val promptId = sequenceService.generateSequence(MESSAGE_SEQUENCE_NAME)
         mongoTemplate.insert(Message(
             null,
-            sid,
+            sessionId=sid,
             promptId,
-            userMessage,
+            content=userMessage,
             MessageRole.USER,
             Instant.now(),
         ))
