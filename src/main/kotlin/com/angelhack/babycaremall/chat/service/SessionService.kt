@@ -20,10 +20,13 @@ class SessionService(
     }
 
     fun messages(sessionId: String, lastMessageId: Long?): List<Message> {
-        return if (lastMessageId != null) mongoTemplate.find(
-            Query.query(Criteria.where("messageId").gt(lastMessageId)
-                .and("sessionId").`is`(sessionId)),
+        return mongoTemplate.find(
+            Query.query(Criteria.where("sessionId").`is`(sessionId)
+                .let {
+                    if (lastMessageId != null) it.and("messageId").gt(lastMessageId)
+                    else it
+                }
+            ),
             Message::class.java)
-        else mongoTemplate.findAll(Message::class.java)
     }
 }
