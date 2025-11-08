@@ -10,5 +10,6 @@ data class BabyDiary(
     val title: String,
     val date: String,
     val preview: String,
+//    val content: String,
     val image: String
 )
