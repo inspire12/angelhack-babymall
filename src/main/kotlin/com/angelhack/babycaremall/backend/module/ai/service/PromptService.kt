@@ -1,6 +1,5 @@
 package com.angelhack.babycaremall.backend.module.ai.service
 
-import jdk.jpackage.internal.Arguments.CLIOptions.context
 import org.springframework.ai.reader.pdf.PagePdfDocumentReader
 import org.springframework.ai.reader.pdf.config.PdfDocumentReaderConfig
 import org.springframework.beans.factory.annotation.Value

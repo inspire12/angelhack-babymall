@@ -7,14 +7,15 @@ import org.springframework.stereotype.Service
 @Service
 class AiChatService(
     private val chatClient: ChatClient.Builder,
-    private val promptService: PromptService,
+//    private val promptService: PromptService,
+    private val promptRagService: PromptRagService,
 
 ) {
     
     private val client = chatClient.build()
 
     fun generateResponse(userMessage: String, context: String? = null): String {
-        val fullPrompt = promptService.getPrompt(userMessage, context);
+        val fullPrompt = promptRagService.getPrompt(userMessage, context);
         return client.prompt()
             .user(fullPrompt)
             .call()
