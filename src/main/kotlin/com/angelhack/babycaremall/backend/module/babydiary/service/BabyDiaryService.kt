@@ -11,7 +11,7 @@ class BabyDiaryService(
 ) {
     
     fun getAllDiaries(): List<BabyDiary> {
-        return babyDiaryRepository.findAll()
+        return babyDiaryRepository.findAllByOrderByDateDesc()
     }
     
     fun getDiaryById(id: String): Optional<BabyDiary> {

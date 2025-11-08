@@ -33,12 +33,13 @@ class SessionService(
             Message::class.java)
     }
 
-    fun saveSession(userId: String): Session {
+    fun saveSession(userId: String, title: String? = null): Session {
         val sid = UUID.randomUUID().toString()
         return mongoTemplate.insert(
             Session(
                 null,
                 sid,
+                title = title,
                 userId = userId,
                 createdAt = Instant.now(),
             )

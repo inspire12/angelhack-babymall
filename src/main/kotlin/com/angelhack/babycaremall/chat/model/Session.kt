@@ -10,6 +10,7 @@ data class Session (
     @Id
     var id: ObjectId? = null,
     var sessionId: String,
+    val title: String? = null,
     var userId: String,
     var createdAt: Instant,
 )

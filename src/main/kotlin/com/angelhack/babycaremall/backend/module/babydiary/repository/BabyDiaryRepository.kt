@@ -6,4 +6,6 @@ import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface BabyDiaryRepository : MongoRepository<BabyDiary, String>
+interface BabyDiaryRepository : MongoRepository<BabyDiary, String> {
+    fun findAllByOrderByDateDesc(): List<BabyDiary>
+}

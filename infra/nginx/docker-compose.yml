@@ -1,0 +1,9 @@
+services:
+  nginx:
+    image: nginx:stable
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./site:/usr/share/nginx/html:ro
+      - ./logs:/var/log/nginx

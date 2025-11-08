@@ -1,5 +1,6 @@
 package com.angelhack.babycaremall.chat.controller
 
+import com.angelhack.babycaremall.chat.dto.SessionRequest
 import com.angelhack.babycaremall.chat.model.Message
 import com.angelhack.babycaremall.chat.model.Session
 import com.angelhack.babycaremall.chat.service.SessionService
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -33,10 +35,10 @@ class SessionController(
     }
 
     @PostMapping()
-    fun createSession(
+    fun createSession(@RequestBody(required = false) session: SessionRequest
     ): Session {
         // skip validation for sessionid owned by user
-        return sessionService.saveSession(userId)
+        return sessionService.saveSession(userId, session.title)
     }
 
 }

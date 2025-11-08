@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/baby/diaries")
+@CrossOrigin(origins = ["http://localhost:3000"])
 class BabyController(
     private val babyDiaryService: BabyDiaryService
 ) {
