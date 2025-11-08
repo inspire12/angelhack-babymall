@@ -1,10 +1,10 @@
 package com.angelhack.babycaremall.backend.module.ai.service
 
-import com.angelhack.babycaremall.backend.module.ai.dto.ChatContext
 import com.angelhack.babycaremall.backend.module.ai.dto.ChatResponse
+import com.angelhack.babycaremall.backend.module.babydiary.service.BabyDiaryService
 import com.angelhack.babycaremall.const.MessageRole
-import com.angelhack.babycaremall.chat.model.Message
-import com.angelhack.babycaremall.chat.model.Session
+import com.angelhack.babycaremall.backend.module.chat.model.Message
+import com.angelhack.babycaremall.backend.module.chat.model.Session
 import com.angelhack.babycaremall.const.MESSAGE_SEQUENCE_NAME
 import org.springframework.ai.chat.client.ChatClient
 import org.springframework.ai.chat.memory.InMemoryChatMemory
@@ -22,7 +22,8 @@ class AiChatService(
     private val chatClient: ChatClient.Builder,
     private val mongoTemplate: MongoTemplate,
     private val promptRagService: PromptRagService,
-    private val chatMemory : InMemoryChatMemory = InMemoryChatMemory()
+    private val chatMemory : InMemoryChatMemory = InMemoryChatMemory(),
+    private val diaryService: BabyDiaryService
 ) {
     private val userId = UUID.fromString("a0e99a9c-790d-44aa-aa7d-6e9cc6b614d0")
     private val client = chatClient.build()
@@ -37,8 +38,8 @@ class AiChatService(
         val sid: String = sessionId ?: UUID.randomUUID().toString()
 
         val memoryMessage = if (!isNewSession) chatMemory.get(sessionId, 5) else listOf()
-
-        val fullPrompt = promptRagService.getPrompt(memoryMessage, userMessage, context, sid)
+        val allDiaries = diaryService.getAllDiaries()
+        val fullPrompt = promptRagService.getPrompt(allDiaries, memoryMessage, userMessage, context, sid)
         val answer: String = client.prompt()
             .user(fullPrompt)
             .call()

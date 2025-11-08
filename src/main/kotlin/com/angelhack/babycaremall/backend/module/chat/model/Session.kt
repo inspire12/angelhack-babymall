@@ -1,4 +1,4 @@
-package com.angelhack.babycaremall.chat.model
+package com.angelhack.babycaremall.backend.module.chat.model
 
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id

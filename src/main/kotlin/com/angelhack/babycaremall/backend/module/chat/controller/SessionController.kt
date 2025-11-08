@@ -1,9 +1,9 @@
-package com.angelhack.babycaremall.chat.controller
+package com.angelhack.babycaremall.backend.module.chat.controller
 
-import com.angelhack.babycaremall.chat.dto.SessionRequest
-import com.angelhack.babycaremall.chat.model.Message
-import com.angelhack.babycaremall.chat.model.Session
-import com.angelhack.babycaremall.chat.service.SessionService
+import com.angelhack.babycaremall.backend.module.chat.dto.SessionRequest
+import com.angelhack.babycaremall.backend.module.chat.model.Message
+import com.angelhack.babycaremall.backend.module.chat.model.Session
+import com.angelhack.babycaremall.backend.module.chat.service.SessionService
 import org.springframework.web.bind.annotation.CrossOrigin
 
 import org.springframework.web.bind.annotation.GetMapping

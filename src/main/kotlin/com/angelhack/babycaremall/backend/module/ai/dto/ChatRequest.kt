@@ -1,7 +1,6 @@
 package com.angelhack.babycaremall.backend.module.ai.dto
 
-import com.angelhack.babycaremall.chat.model.Message
-import com.angelhack.babycaremall.const.MessageRole
+import com.angelhack.babycaremall.backend.module.chat.model.Message
 
 data class ChatRequest(
     val content: String,

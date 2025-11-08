@@ -1,7 +1,7 @@
-package com.angelhack.babycaremall.chat.service
+package com.angelhack.babycaremall.backend.module.chat.service
 
-import com.angelhack.babycaremall.chat.model.Message
-import com.angelhack.babycaremall.chat.model.Session
+import com.angelhack.babycaremall.backend.module.chat.model.Message
+import com.angelhack.babycaremall.backend.module.chat.model.Session
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query

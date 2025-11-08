@@ -1,5 +1,7 @@
 package com.angelhack.babycaremall.backend.module.ai.service
 
+import com.angelhack.babycaremall.backend.module.babydiary.dto.BabyDiary
+import org.apache.coyote.http11.Constants.a
 import org.springframework.ai.chat.memory.InMemoryChatMemory
 import org.springframework.ai.chat.messages.Message
 import org.springframework.ai.chat.messages.UserMessage
@@ -18,7 +20,7 @@ class PromptRagService(
     private val vectorStore: VectorStore,
 ) {
 
-    fun getPrompt(memoryMessage: List<Message>, userMessage: String, context: String? = null, sessionId: String): String {
+    fun getPrompt(allDiaries: List<BabyDiary>, memoryMessage: List<Message>, userMessage: String, context: String? = null, sessionId: String): String {
         val hits = vectorStore.similaritySearch(
             userMessage
         )
@@ -29,11 +31,12 @@ class PromptRagService(
         아기용품, 육아 상담, 제품 추천에 대해 도움을 드릴 수 있습니다.
         항상 친근하고 도움이 되는 답변을 제공해주세요.
     """.trimIndent()
-
+        val diariesTextList = allDiaries.stream().map { diary -> (diary.date + " " + diary.preview)}.toList()
+        val diariesText = diariesTextList.joinToString { text -> text }
         val message = mutableListOf<Message>()
         message+= memoryMessage
+        message+= UserMessage(diariesText)
         message+= UserMessage(userMessage)
-
         val fullPrompt = buildString {
             appendLine(systemPrompt)
             context?.let { appendLine("\n컨텍스트: $it") }
