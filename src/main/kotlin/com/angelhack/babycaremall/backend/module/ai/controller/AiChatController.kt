@@ -17,11 +17,12 @@ class AiChatController(
     @PostMapping("/chat")
     fun chat(@RequestBody request: ChatRequest): ResponseEntity<ChatResponse> {
         return try {
-            val response = aiChatService.generateResponse(request.message, request.context)
+
+            val response = aiChatService.generateResponse(request.message, request.context, request.sessionId)
             ResponseEntity.ok(
                 ChatResponse(
-                    response = response,
-                    sessionId = request.sessionId
+                    response = response.text,
+                    sessionId = response.sessionId
                 )
             )
         } catch (e: Exception) {
@@ -43,7 +44,7 @@ class AiChatController(
                 budget = request.budget,
                 ageGroup = request.ageGroup
             )
-            ResponseEntity.ok(ChatResponse(response = response))
+            ResponseEntity.ok(ChatResponse(response = response.text, sessionId = response.sessionId))
         } catch (e: Exception) {
             ResponseEntity.internalServerError().body(
                 ChatResponse(response = "제품 추천 중 오류가 발생했습니다: ${e.message}")
