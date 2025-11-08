@@ -33,7 +33,8 @@ class AiChatController(
             )
         }
     }
-    
+
+
     @PostMapping("/recommend")
     fun recommendProducts(@RequestBody request: ProductRecommendationRequest): ResponseEntity<ChatResponse> {
         return try {
