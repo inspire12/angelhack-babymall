@@ -15,5 +15,6 @@ data class ChatResponse(
 data class ProductRecommendationRequest(
     val category: String,
     val budget: String? = null,
-    val ageGroup: String? = null
+    val ageGroup: String? = null,
+    val sessionId: String? = null
 )

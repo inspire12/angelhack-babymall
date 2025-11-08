@@ -8,6 +8,7 @@ import org.springframework.ai.openai.api.OpenAiApi
 import org.springframework.ai.reader.pdf.PagePdfDocumentReader
 import org.springframework.ai.reader.pdf.config.PdfDocumentReaderConfig
 import org.springframework.ai.transformer.splitter.TokenTextSplitter
+import org.springframework.ai.vectorstore.SearchRequest
 import org.springframework.ai.vectorstore.SimpleVectorStore
 import org.springframework.ai.vectorstore.VectorStore
 import org.springframework.beans.factory.annotation.Qualifier
@@ -20,7 +21,6 @@ import org.springframework.core.io.Resource
 @Configuration
 class AiConfig(
     private val vectorStore: VectorStore,
-    private val embeddingModel: EmbeddingModel,
 ) {
 
     @Bean
@@ -31,6 +31,20 @@ class AiConfig(
 
     @Bean
     fun ingestPdf(@Value("classpath:prompts/manual.pdf") manualPdf: Resource): ApplicationRunner = ApplicationRunner {
+
+        // 1) 'manual.pdf'가 이미 벡터스토어에 있나 간단히 확인
+        val alreadyIndexed = vectorStore
+            .similaritySearch(
+                SearchRequest
+                    .query("ping")
+                    .withTopK(1)
+                    .withFilterExpression("""source == "manual.pdf" """)
+            )
+            .isNotEmpty()
+
+        if (alreadyIndexed) return@ApplicationRunner  // ❗이미 있으면 스킵
+
+
         val docs = PagePdfDocumentReader(
             manualPdf,
             PdfDocumentReaderConfig.builder().withPagesPerDocument(1).build()

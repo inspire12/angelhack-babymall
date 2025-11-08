@@ -1,7 +1,11 @@
 package com.angelhack.babycaremall.backend.module.ai.service
 
+import org.springframework.ai.chat.memory.InMemoryChatMemory
+import org.springframework.ai.chat.messages.Message
+import org.springframework.ai.chat.messages.UserMessage
 import org.springframework.ai.reader.pdf.PagePdfDocumentReader
 import org.springframework.ai.reader.pdf.config.PdfDocumentReaderConfig
+import org.springframework.ai.vectorstore.SearchRequest
 import org.springframework.ai.vectorstore.VectorStore
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.Resource
@@ -9,13 +13,15 @@ import org.springframework.stereotype.Service
 import kotlin.collections.joinToString
 
 @Service
-class PromptRagService (
+class PromptRagService(
 
     private val vectorStore: VectorStore,
-){
+) {
 
-    fun getPrompt(userMessage: String, context: String? = null) : String {
-        val hits = vectorStore.similaritySearch(userMessage)
+    fun getPrompt(memoryMessage: List<Message>, userMessage: String, context: String? = null, sessionId: String): String {
+        val hits = vectorStore.similaritySearch(
+            userMessage
+        )
         val ctx = hits.joinToString("\n\n") { "- ${it.content}" }
 
         val systemPrompt = """
@@ -24,11 +30,16 @@ class PromptRagService (
         항상 친근하고 도움이 되는 답변을 제공해주세요.
     """.trimIndent()
 
+        val message = mutableListOf<Message>()
+        message+= memoryMessage
+        message+= UserMessage(userMessage)
+
         val fullPrompt = buildString {
             appendLine(systemPrompt)
             context?.let { appendLine("\n컨텍스트: $it") }
             appendLine("\n검색 컨텍스트:\n$ctx")
-            appendLine("\n사용자 질문: $userMessage")
+            appendLine("\n사용자 질문: $message")
+            appendLine("\n사용자 문맥: $sessionId")
         }
 
         return fullPrompt
