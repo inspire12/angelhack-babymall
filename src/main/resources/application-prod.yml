@@ -13,13 +13,13 @@ spring:
     mongodb:
 #      host: localhost
 #      port: 27017
-      uri: mongodb://${MONGO_SERVER}:27017/mydb
+      uri: mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_SERVER}:27017/mall?authSource=admin
       # 또는 개별 설정
       # host: localhost
       # port: 27017
       # database: mydb
-      username: babycaremall
-      password: babycaremall12#
+#      username: babycaremall
+#      password: babycaremall12#
 
   mongodb:
     uuid-representation: standard   # (권장) UUID 표준 표현

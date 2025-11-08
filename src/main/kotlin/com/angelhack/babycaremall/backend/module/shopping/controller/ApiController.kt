@@ -1,4 +1,4 @@
-package com.angelhack.babycaremall.backend.module.shopping.presentation.controller
+package com.angelhack.babycaremall.backend.module.shopping.controller
 
 import com.angelhack.babycaremall.backend.module.shopping.domain.service.User
 import com.angelhack.babycaremall.backend.module.shopping.domain.service.UserService
