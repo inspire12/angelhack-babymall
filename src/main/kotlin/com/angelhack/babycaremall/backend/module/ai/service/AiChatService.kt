@@ -32,7 +32,7 @@ class AiChatService(
         userMessage: String,
         context: String? = null,
         sessionId: String? = null,
-    ): ChatContext {
+    ): ChatResponse {
         val isNewSession = sessionId == null
         val sid: String = sessionId ?: UUID.randomUUID().toString()
 
@@ -54,25 +54,35 @@ class AiChatService(
             createdAt = Instant.now(),
         ))
 
+        val promptId = sequenceService.generateSequence(MESSAGE_SEQUENCE_NAME)
         mongoTemplate.insert(Message(
             null,
             sid,
-            sequenceService.generateSequence(MESSAGE_SEQUENCE_NAME),
+            promptId,
             userMessage,
             MessageRole.USER,
             Instant.now(),
         ))
 
+        val responseId = sequenceService.generateSequence(MESSAGE_SEQUENCE_NAME)
+        val responseAt = Instant.now()
         mongoTemplate.insert(Message(
             null,
             sid,
-            sequenceService.generateSequence(MESSAGE_SEQUENCE_NAME),
+            responseId,
             answer,
             MessageRole.SYSTEM,
-            Instant.now(),
+            responseAt,
         ))
 
-        return ChatContext(answer, sid)
+        return ChatResponse(
+            responseId,
+            MessageRole.SYSTEM,
+            answer,
+            null,
+            responseAt.toEpochMilli(),
+            sid
+        )
     }
 
     fun generateProductRecommendation(userId: String, category: String, budget: String?, ageGroup: String?): ChatResponse {
