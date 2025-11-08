@@ -1,30 +1,21 @@
 package com.angelhack.babycaremall.backend.module.ai.service
 
 import org.springframework.ai.chat.client.ChatClient
-import org.springframework.ai.chat.model.ChatModel
 import org.springframework.stereotype.Service
+
 
 @Service
 class AiChatService(
     private val chatClient: ChatClient.Builder,
-    private val chatModel: ChatModel
+//    private val promptService: PromptService,
+    private val promptRagService: PromptRagService,
+
 ) {
     
     private val client = chatClient.build()
-    
+
     fun generateResponse(userMessage: String, context: String? = null): String {
-        val systemPrompt = """
-            당신은 육아용품몰의 친절한 AI 어시스턴트입니다.
-            아기용품, 육아 상담, 제품 추천에 대해 도움을 드릴 수 있습니다.
-            항상 친근하고 도움이 되는 답변을 제공해주세요.
-        """.trimIndent()
-        
-        val fullPrompt = if (context != null) {
-            "$systemPrompt\n\n컨텍스트: $context\n\n사용자 질문: $userMessage"
-        } else {
-            "$systemPrompt\n\n사용자 질문: $userMessage"
-        }
-        
+        val fullPrompt = promptRagService.getPrompt(userMessage, context);
         return client.prompt()
             .user(fullPrompt)
             .call()

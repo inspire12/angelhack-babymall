@@ -4,6 +4,11 @@ server:
 spring:
   thymeleaf:
     cache: false
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_SERVER}:5432/aivector
+    username: ${POSTGRES_USER:ai}
+    password: ${POSTGRES_PASSWORD:ai1234}
+
   data:
     mongodb:
 #      host: localhost
@@ -22,9 +27,10 @@ spring:
         options:
           model: gpt-3.5-turbo
           temperature: 0.7
-    anthropic:
-      api-key: ${ANTHROPIC_API_KEY}
-      chat:
-        options:
-          model: claude-3-haiku
-          temperature: 0.7
+
+    vectorstore:
+      pgvector:
+        initialize-schema: false
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
+        dimensions: 1536
