@@ -55,7 +55,7 @@ class AiChatService(
         ))
 
         val promptId = sequenceService.generateSequence(MESSAGE_SEQUENCE_NAME)
-        mongoTemplate.insert(Message(
+        val sentMessage = mongoTemplate.insert(Message(
             null,
             sessionId=sid,
             promptId,
@@ -66,7 +66,7 @@ class AiChatService(
 
         val responseId = sequenceService.generateSequence(MESSAGE_SEQUENCE_NAME)
         val responseAt = Instant.now()
-        mongoTemplate.insert(Message(
+        val response = mongoTemplate.insert(Message(
             null,
             sid,
             responseId,
@@ -76,12 +76,8 @@ class AiChatService(
         ))
 
         return ChatResponse(
-            responseId,
-            MessageRole.SYSTEM,
-            answer,
-            null,
-            responseAt.toEpochMilli(),
-            sid
+            message = response,
+            sentMessage = sentMessage,
         )
     }
 

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/sessions")
+@RequestMapping("/api/sessions")
 @CrossOrigin(origins = ["http://localhost:3000"])
 class SessionController(
     val sessionService: SessionService,

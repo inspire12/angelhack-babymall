@@ -20,27 +20,9 @@ class AiChatController(
     fun chat(@RequestBody request: ChatRequest): ResponseEntity<ChatResponse> {
         return try {
             val response = aiChatService.generateResponse(userId, request.content, request.context, request.sessionId)
-            ResponseEntity.ok(
-                ChatResponse(
-                    content = response.content,
-                    sessionId = response.sessionId,
-                    created = System.currentTimeMillis(),
-                    id = response.id,
-                    role = response.role,
-                    context = response.context
-                )
-            )
+            ResponseEntity.ok(response)
         } catch (e: Exception) {
-            ResponseEntity.internalServerError().body(
-                ChatResponse(
-                    content = "죄송합니다. 오류가 발생했습니다: ${e.message}",
-                    sessionId = request.sessionId,
-                    id = 0,
-                    role = MessageRole.USER,
-                    context = request.context,
-                    created = System.currentTimeMillis()
-                )
-            )
+            ResponseEntity.internalServerError().build<ChatResponse>()
         }
     }
 
@@ -56,16 +38,7 @@ class AiChatController(
             )
             ResponseEntity.ok(response)
         } catch (e: Exception) {
-            ResponseEntity.internalServerError().body(
-                ChatResponse(
-                    content = "제품 추천 중 오류가 발생했습니다: ${e.message}",
-                    sessionId = request.sessionId,
-                    id = 0,
-                    role = MessageRole.USER,
-                    context = "",
-                    created = System.currentTimeMillis()
-                )
-            )
+            ResponseEntity.internalServerError().build<ChatResponse>()
         }
     }
     
