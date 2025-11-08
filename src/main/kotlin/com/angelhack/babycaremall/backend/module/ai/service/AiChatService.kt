@@ -36,7 +36,7 @@ class AiChatService(
         val isNewSession = sessionId == null
         val sid: String = sessionId ?: UUID.randomUUID().toString()
 
-        val memoryMessage = chatMemory.get(sessionId, 5)
+        val memoryMessage = if (!isNewSession) chatMemory.get(sessionId, 5) else listOf()
 
         val fullPrompt = promptRagService.getPrompt(memoryMessage, userMessage, context, sid)
         val answer: String = client.prompt()
