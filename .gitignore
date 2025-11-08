@@ -1,7 +1,7 @@
 .idea/**
 src/main/resources/static/app
 src/main/resources/env.yml
-
+*/.env
 
 HELP.md
 .gradle
