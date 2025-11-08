@@ -21,22 +21,6 @@ services:
     networks:
       - mongo-net
 
-  mongo-express:
-    image: mongo-express:latest
-    container_name: mongo-express
-    restart: unless-stopped
-    depends_on:
-      - mongo
-    ports:
-      - "${ME_PORT}:8081"
-    environment:
-      ME_CONFIG_MONGODB_SERVER: mongo
-      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_ROOT_USERNAME}
-      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_ROOT_PASSWORD}
-      ME_CONFIG_BASICAUTH: "false" # 필요 시 true로 바꾸고 사용자/암호 추가
-    networks:
-      - mongo-net
-
 volumes:
   mongo-data:
 
