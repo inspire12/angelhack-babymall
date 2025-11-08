@@ -4,15 +4,6 @@ server:
 spring:
   thymeleaf:
     cache: false
-  data:
-    mongodb:
-#      host: localhost
-#      port: 27017
-      uri: mongodb://localhost:27017/mydb
-      # 또는 개별 설정
-      # host: localhost
-      # port: 27017
-      # database: mydb
   mongodb:
     uuid-representation: standard   # (권장) UUID 표준 표현
   ai:
