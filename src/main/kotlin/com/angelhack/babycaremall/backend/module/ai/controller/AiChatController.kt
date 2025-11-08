@@ -13,12 +13,13 @@ import org.springframework.web.bind.annotation.*
 class AiChatController(
     private val aiChatService: AiChatService
 ) {
-    
+    private val userId ="a0e99a9c-790d-44aa-aa7d-6e9cc6b614d0"
+
     @PostMapping("/chat")
     fun chat(@RequestBody request: ChatRequest): ResponseEntity<ChatResponse> {
         return try {
 
-            val response = aiChatService.generateResponse(request.message, request.context, request.sessionId)
+            val response = aiChatService.generateResponse(userId, request.message, request.context, request.sessionId)
             ResponseEntity.ok(
                 ChatResponse(
                     response = response.text,
@@ -40,6 +41,7 @@ class AiChatController(
     fun recommendProducts(@RequestBody request: ProductRecommendationRequest): ResponseEntity<ChatResponse> {
         return try {
             val response = aiChatService.generateProductRecommendation(
+                userId,
                 category = request.category,
                 budget = request.budget,
                 ageGroup = request.ageGroup
